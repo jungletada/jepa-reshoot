@@ -10,6 +10,7 @@ from PIL import Image
 import torch
 from tqdm.auto import tqdm
 from utils.vista4d_checkpoint import load_checkpoint_into_model, wrapped_key_map
+from jepa.adapter import JEPAAdapter
 
 from ..diffusion import FlowMatchScheduler
 from ..core import AutoWrappedModule, ModelConfig
@@ -46,6 +47,7 @@ FLOWLONG_BATCH_SENSITIVE_FIELDS = frozenset(
         "source_mask_latents",
         "point_cloud_mask_latents",
         "first_frame_latents",
+        "jepa_features",
     }
 )
 
@@ -152,6 +154,7 @@ class Vista4DPipeline(BasePipeline):
         vista4d_checkpoint: Union[str, List[str]] = None,
         use_usp: bool = False,
         vram_limit: float = None,
+        jepa_adapter_checkpoint: str = None,
     ):
         # Initialize pipeline
         pipe = Vista4DPipeline(device=device, torch_dtype=torch_dtype)
@@ -232,6 +235,13 @@ class Vista4DPipeline(BasePipeline):
                     f"Encountered the following unexpected keys from Vista4D checkpoint: {unexpected_keys}."
                 print(f"Loaded checkpoint from: {vista4d_checkpoint}")
 
+        if jepa_adapter_checkpoint is not None:
+            if pipe.dit is None or pipe.dit2 is not None or use_usp:
+                raise ValueError("JEPA currently supports a single Vista4D DiT without USP")
+            pipe.dit.jepa_adapter, pipe.jepa_encoder_id = JEPAAdapter.load(
+                jepa_adapter_checkpoint, pipe.dit.dim, len(pipe.dit.blocks),
+            )
+
         # Change image_encoder.model.log_scale from scalar to 1D tensor, otherwise FSDP2 reports an error
         if pipe.image_encoder is not None:
             pipe.image_encoder.model.log_scale = torch.nn.Parameter(pipe.image_encoder.model.log_scale.data.view(1))
@@ -288,7 +298,25 @@ class Vista4DPipeline(BasePipeline):
         tiled,
         tile_size,
         tile_stride,
+        jepa_features=None,
+        jepa_scale=1.0,
     ):
+        if jepa_features is not None:
+            if not hasattr(self.dit, "jepa_adapter"):
+                raise ValueError("Load or train a JEPA adapter before supplying structural features")
+            if self.dit2 is not None or getattr(self, "use_unified_sequence_parallel", False):
+                raise ValueError("JEPA currently supports a single Vista4D DiT without USP")
+            jepa_features = jepa_features.to(device=self.device, dtype=self.torch_dtype)
+            if jepa_features.ndim != 5 or jepa_features.shape[0] not in (1, batch_size):
+                raise ValueError("JEPA features must be B,C,T,H,W with batch size 1 or the video batch size")
+            if jepa_features.shape[0] == 1:
+                jepa_features = jepa_features.expand(batch_size, -1, -1, -1, -1)
+            for videos in (source_video, point_cloud_video):
+                if videos is not None and any(
+                    len(video) != num_frames or any(frame.size != (width, height) for frame in video)
+                    for video in videos
+                ):
+                    raise ValueError("JEPA requires prepared videos with matching frames/resolution; implicit crop or padding would misalign features")
         negative_prompt = [""] * batch_size if negative_prompt is None else negative_prompt
         inputs_posi = {"prompt": prompt, "num_inference_steps": num_inference_steps}
         inputs_nega = {
@@ -325,6 +353,8 @@ class Vista4DPipeline(BasePipeline):
             "tiled": tiled,
             "tile_size": tile_size,
             "tile_stride": tile_stride,
+            "jepa_features": jepa_features,
+            "jepa_scale": jepa_scale,
         }
         for unit in self.units:
             inputs_shared, inputs_posi, inputs_nega = self.unit_runner(
@@ -495,6 +525,8 @@ class Vista4DPipeline(BasePipeline):
         # Progress bar
         progress_bar_cmd = tqdm,
         output_type: Optional[Literal["quantized", "floatpoint"]] = "quantized",
+        jepa_features: Optional[torch.Tensor] = None,
+        jepa_scale: float = 1.0,
     ):
         # Seed (multiple-seed inference, length of seed array determines inference batch size)
         batch_size = len(seed)
@@ -531,6 +563,8 @@ class Vista4DPipeline(BasePipeline):
             tiled=tiled,
             tile_size=tile_size,
             tile_stride=tile_stride,
+            jepa_features=jepa_features,
+            jepa_scale=jepa_scale,
         )
 
         # Denoise
@@ -614,6 +648,8 @@ class Vista4DPipeline(BasePipeline):
         tile_stride: Optional[tuple[int, int]] = (15, 26),
         progress_bar_cmd=tqdm,
         output_type: Optional[Literal["quantized", "floatpoint"]] = "quantized",
+        jepa_features: Optional[torch.Tensor] = None,
+        jepa_scale: float = 1.0,
     ):
         started = perf_counter()
         batch_size = flowlong_geometry.num_windows
@@ -673,6 +709,8 @@ class Vista4DPipeline(BasePipeline):
             tiled=tiled,
             tile_size=tile_size,
             tile_stride=tile_stride,
+            jepa_features=jepa_features,
+            jepa_scale=jepa_scale,
         )
         initial_window_latents = inputs_shared["latents"]
         if initial_window_latents.shape[0] != batch_size:
@@ -1255,8 +1293,9 @@ class WanVideoUnit_CfgMerger(PipelineUnit):
     def __init__(self):
         super().__init__(take_over=True)
         self.concat_tensor_names = [
-            "context", "cam_emb", "clip_feature", "y", "y_empty",
+            "context", "cam_emb", "clip_feature", "y", "y_empty", "jepa_features",
             "source_latents", "point_cloud_latents", "source_mask_latents", "point_cloud_mask_latents",
+            "source_video_latents", "point_cloud_video_latents",
         ]
 
     def process(self, pipe: Vista4DPipeline, inputs_shared, inputs_posi, inputs_nega):
@@ -1311,8 +1350,12 @@ def model_fn_vista4d(
     use_gradient_checkpointing: bool = False,
     use_gradient_checkpointing_offload: bool = False,
     fuse_vae_embedding_in_latents: bool = False,
+    jepa_features: Optional[torch.Tensor] = None,
+    jepa_scale: float = 1.0,
     **kwargs,
 ):
+    if jepa_features is not None and (not hasattr(dit, "jepa_adapter") or use_unified_sequence_parallel):
+        raise ValueError("JEPA features require an attached adapter and USP disabled")
     if use_unified_sequence_parallel:
         import torch.distributed as dist
         from xfuser.core.distributed import get_sequence_parallel_rank, get_sequence_parallel_world_size, get_sp_group
@@ -1326,6 +1369,12 @@ def model_fn_vista4d(
         ]
         t = chunks[get_sequence_parallel_rank()]
         return t, pad_shape
+
+    # Merged CFG doubles the batch, not the number of copies by batch size.
+    if timestep.shape[0] != context.shape[0]:
+        if context.shape[0] % timestep.shape[0]:
+            raise ValueError("Timestep batch is incompatible with text context")
+        timestep = timestep.repeat(context.shape[0] // timestep.shape[0])
 
     # Timestep
     if dit.seperated_timestep and fuse_vae_embedding_in_latents:
@@ -1350,9 +1399,9 @@ def model_fn_vista4d(
     x = latents
     # Merged cfg
     if x.shape[0] != context.shape[0]:
-        x = torch.concat([x] * context.shape[0], dim=0)
-    if timestep.shape[0] != context.shape[0]:
-        timestep = torch.concat([timestep] * context.shape[0], dim=0)
+        if context.shape[0] % x.shape[0]:
+            raise ValueError("Latent batch is incompatible with text context")
+        x = torch.cat([x] * (context.shape[0] // x.shape[0]), dim=0)
 
     # Image latents and embedding
     if y is not None and dit.require_vae_embedding:
@@ -1372,6 +1421,9 @@ def model_fn_vista4d(
     x = torch.cat((x, point_cloud_latents, source_latents), dim=1)  # Concatenate output, point cloud, and source
     freqs = get_freqs(dit, (f, h, w), device=x.device)
 
+    if jepa_features is not None and jepa_scale != 0:
+        jepa_features = dit.jepa_adapter.prepare(jepa_features.to(x), (f, h, w), x.shape[0])
+
     # Camera embedding (already downsampled to post-patchify, just need to group dims)
     if cam_emb is not None:
         cam_emb = rearrange(cam_emb, "b f h w d -> b (f h w) d")
@@ -1389,7 +1441,7 @@ def model_fn_vista4d(
         return custom_forward
 
     # DiT blocks
-    for block in dit.blocks:
+    for block_index, block in enumerate(dit.blocks):
         if use_gradient_checkpointing_offload:
             with torch.autograd.graph.save_on_cpu():
                 x = torch.utils.checkpoint.checkpoint(
@@ -1401,6 +1453,15 @@ def model_fn_vista4d(
             )
         else:
             x = block(x, context, t_mod, freqs, cam_emb)
+        if jepa_features is not None and jepa_scale != 0 and block_index in dit.jepa_adapter.config.layers:
+            # Keep the adapter separate from wrapped/offloaded DiT blocks. Only the
+            # generated-video tokens receive the residual; source/PC tokens stay intact.
+            if use_gradient_checkpointing or use_gradient_checkpointing_offload:
+                x = torch.utils.checkpoint.checkpoint(
+                    dit.jepa_adapter, x, jepa_features, (f, h, w), block_index, jepa_scale, use_reentrant=False,
+                )
+            else:
+                x = dit.jepa_adapter(x, jepa_features, (f, h, w), block_index, jepa_scale)
 
     x = dit.head(x, t)
     if use_unified_sequence_parallel and dist.is_initialized() and dist.get_world_size() > 1:

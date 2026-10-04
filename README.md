@@ -28,6 +28,7 @@ python -m scripts.test_video.run_video_experiment --config configs/1776148878076
 | [docs/FlowLong_Plan.md](docs/FlowLong_Plan.md) | FlowLong 实现设计 |
 | [docs/report_usage.md](docs/report_usage.md) | 各阶段耗时与显存实测 |
 | [docs/report_low_vram.md](docs/report_low_vram.md) | 低显存预设验证 |
+| [docs/jepa_scheme1_implementation.md](docs/jepa_scheme1_implementation.md) | JEPA 方案 1：Oracle 适配器、源条件预测器、训练与推理实验入口 |
 
 ---
 

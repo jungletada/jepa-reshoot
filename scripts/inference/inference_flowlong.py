@@ -17,6 +17,7 @@ from diffsynth.pipelines.flowlong import (
     build_geometry_from_manifest,
 )
 from scripts.inference.inference import get_pipeline
+from jepa.inference import add_jepa_args, load_jepa_inputs
 from utils.media import load_cameras, load_masks, load_video, save_video
 from utils.resolution import (
     validate_manifest_resolution,
@@ -351,6 +352,7 @@ def main(args) -> None:
         raise ValueError("--vista4d_checkpoint_sha256 must be a 64-digit hex digest")
 
     pipe = get_pipeline(args, vista4d_config)
+    inputs.update(load_jepa_inputs(args, pipe, geometry.num_windows, windowed=True))
     sampling_config = FlowLongSamplingConfig(
         stochastic_threshold=args.flowlong_stochastic_threshold,
         stochastic_enabled=not args.flowlong_disable_stochastic,
@@ -411,6 +413,10 @@ def main(args) -> None:
             "prompt_sha256": sha256_text(args.prompt),
             "negative_prompt_sha256": sha256_text(args.negative_prompt),
             "experiment": {
+                "jepa_mode": args.jepa_mode,
+                "jepa_adapter": args.jepa_adapter,
+                "jepa_features": args.jepa_features,
+                "jepa_scale": args.jepa_scale,
                 "seed": int(seed),
                 "num_inference_steps": int(args.num_inference_steps),
                 "sigma_shift": float(args.sigma_shift),
@@ -446,6 +452,7 @@ if __name__ == "__main__":
         description="Run joint-timestep FlowLong sampling for Vista4D windows."
     )
     parser.add_argument("--manifest", required=True)
+    add_jepa_args(parser)
     parser.add_argument("--result_root", default="./results/flowlong_single")
     parser.add_argument("--render_folder", default="render_384p_smooth")
     parser.add_argument("--output_folder", required=True)

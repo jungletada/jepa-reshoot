@@ -1,0 +1,1 @@
+{"input_folder":"../../results/jepa/clip01/render","target_video":"../../results/jepa/clip01/target.mp4","prompt":"A realistic video of the scene.","features":["../../results/jepa/clip01/oracle.pt","../../results/jepa/clip01/predicted.pt"]}

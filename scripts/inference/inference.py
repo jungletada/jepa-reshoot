@@ -14,9 +14,11 @@ from diffsynth.utils.vista4d.media import crop_and_resize_pil
 
 from utils.media import load_cameras, load_masks, load_video, np_to_pil, pil_to_np, save_mp4_with_gif
 from utils.vram_presets import add_vram_args, apply_vram_settings_to_model_configs, resolve_vram_settings
+from jepa.inference import add_jepa_args, load_jepa_inputs, validate_jepa_args
 
 
 def get_pipeline(args, vista4d_config: Dict[str, Any]):
+    validate_jepa_args(args)
     model_id_with_origin_paths = args.model_id_with_origin_paths.split(",")
     model_configs = [
         ModelConfig(
@@ -44,6 +46,7 @@ def get_pipeline(args, vista4d_config: Dict[str, Any]):
         vista4d_checkpoint=args.vista4d_checkpoint,
         use_usp=args.use_usp,
         vram_limit=vram_settings["vram_limit"],
+        jepa_adapter_checkpoint=getattr(args, "jepa_adapter", None),
     )
     return pipe
 
@@ -126,6 +129,7 @@ def main(args):
 
     inputs, fps = get_inputs(args, vista4d_config)
     pipe = get_pipeline(args, vista4d_config)  # Also initializes USP
+    inputs.update(load_jepa_inputs(args, pipe, len(args.seed)))
 
     if args.num_inference_time_trials is not None:
         print(f"Running inference time trials n={args.num_inference_time_trials} times, not saving outputs.")
@@ -171,13 +175,20 @@ def main(args):
         save_mp4_with_gif(path.join(args.output_folder, f"video_seed={seed}"), video=video, fps=fps,)
 
 
-if __name__ == "__main__":
-    parser = ArgumentParser()
+def add_model_args(parser):
     parser.add_argument("--model_id_with_origin_paths", required=True, type=str)
     parser.add_argument("--tokenizer_id_with_origin_path", required=True, type=str)
     parser.add_argument("--local_model_folder", required=True, type=str)
     parser.add_argument("--vista4d_checkpoint", required=True, type=str)
     parser.add_argument("--vista4d_config_path", type=str, required=True)
+    parser.add_argument("--use_usp", action="store_true", default=False)
+    add_vram_args(parser)
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+    add_model_args(parser)
+    add_jepa_args(parser)
 
     parser.add_argument("--input_folder", required=True, type=str)
     parser.add_argument("--output_folder", required=True, type=str)
@@ -200,13 +211,10 @@ if __name__ == "__main__":
     parser.add_argument("--cfg_scale", type=float, default=5.0)
     parser.add_argument("--sigma_shift", type=float, default=5.0)
 
-    parser.add_argument("--use_usp", action="store_true", default=False)
     parser.add_argument("--cfg_merge", action="store_true", default=False)
     parser.add_argument("--tile_vae", action="store_true", default=False)
-    add_vram_args(parser)
     parser.add_argument("--seed", type=int, nargs="+", default=[10027])  # batch_size > 1 multi-seed generation
 
     parser.add_argument("--num_inference_time_trials", type=int, default=None)  # Run N inference trials, no video saves
     args = parser.parse_args()
     main(args)
-
