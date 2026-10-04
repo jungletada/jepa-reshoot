@@ -1,0 +1,58 @@
+# Paths are relative to the repository root, not this YAML file.
+schema_version: 1
+video:
+  path: data/my_video.mp4
+  resolution: 384p
+  mode: full                  # full / single_clip
+
+single_clip:
+  start_frame: 0
+  name: null                  # Derive CLIP_NAME/EXAMPLE automatically.
+
+preprocess:
+  reconstruction: da3
+  da3_process_res: auto
+  segmentation_keywords: [person, man, woman, hand, phone, bag, backpack, car, stroller]
+  save_visuals: false
+
+camera:
+  use_smoothed: true          # Required for the full shared-static workflow.
+  translation_sigma: 8.0
+  rotation_sigma: 10.0
+
+render:
+  mode: auto                 # full -> shared_static; single_clip -> single
+  static_frame_stride: 4
+  chunk_size: 4
+  save_visuals: false
+
+# Fixed supported geometry; stride is derived, never configured separately.
+windows:
+  frames: 49
+  baseline_overlap: 5
+  flowlong_overlap: 25
+  temporal_alignment: 4
+  tail_padding: repeat_last
+
+inference:
+  seed: 10027
+  steps: 50
+  cfg_scale: 5.0
+  sigma_shift: 5.0
+  tile_vae: true
+  microbatch_size: 1
+  prompt: >-
+    A realistic handheld smartphone video of people in an everyday scene,
+    with natural body motion, realistic lighting, stable camera motion,
+    and detailed surroundings.
+
+flowlong:
+  baseline: true
+  matching_only: true
+  stochastic_thresholds: [0.5, 0.6]
+
+models:
+  vista4d: auto               # Or a .pth/safetensors checkpoint DIRECTORY with config.yaml.
+
+outputs:
+  run_name: default          # Change this when changing parameters after execution.
