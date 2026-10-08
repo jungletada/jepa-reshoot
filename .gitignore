@@ -6,12 +6,12 @@ results/
 misc/
 data/*
 logs/*
-
+datasets/*
 media/splits/*
 media/flowlong_splits/*
 media/full/*
 media/config_smoke/
-
+docs/papers/*
 env_pgx.sh
 # Node / React (cam_ui)
 cam_ui/react_app/node_modules/
