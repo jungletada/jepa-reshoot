@@ -9,6 +9,7 @@ pandas
 peft
 protobuf
 safetensors
+diffusers==0.41.0  # Manifold4D flow UniPC, with explicit Wan sigma grid
 sentencepiece
 transformers==4.57.6  # transformers>=5 will break DA3
 # Vista4D
