@@ -1,0 +1,264 @@
+{
+  "repository": "https://github.com/ManifoldTechLtd/Manifold4D",
+  "commit": "cadeac5a6a7341de1ba76f770b3d07a020611fff",
+  "commit_date": "2026-10-09T21:14:06+08:00",
+  "layout": "Official source at repository root; historical project in archive/vista4d.",
+  "files": {
+    ".gitignore": {
+      "path": "docs/upstream/Manifold4D.gitignore",
+      "sha256": "a08fc05f275db03714fd9defb6adc4123c3db47e17889eec4ac79d830211a368"
+    },
+    "LICENSE": {
+      "path": "LICENSE",
+      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+    },
+    "README.md": {
+      "path": "README.upstream.md",
+      "sha256": "c93df2411bf9107e384ed64776afa9e999fa102d38cb37f2655a9b4a741c80e0"
+    },
+    "assets/demo/rabbit-basket/caption.txt": {
+      "path": "assets/demo/rabbit-basket/caption.txt",
+      "sha256": "5c7d3e949d7dc6815e797b9fc75bad2c8dc9cd16d1323b594fbbbe475b6fb4f5"
+    },
+    "assets/demo/rabbit-basket/demo_meta.json": {
+      "path": "assets/demo/rabbit-basket/demo_meta.json",
+      "sha256": "92fc6d694b4a9c89d80d209e435f2a4f2a20362c210917a30a68f46445ad027e"
+    },
+    "assets/demo/rabbit-basket/masks.npz": {
+      "path": "assets/demo/rabbit-basket/masks.npz",
+      "sha256": "b1e02300519f2f467a85232eccc698272d57619dbd4c1d106a152844aea46834"
+    },
+    "assets/demo/rabbit-basket/render.mp4": {
+      "path": "assets/demo/rabbit-basket/render.mp4",
+      "sha256": "8541cfe7ad46898753589eac443af4232a1c1461b1ba0ecc557e40186d257c69"
+    },
+    "assets/demo/rabbit-basket/source.mp4": {
+      "path": "assets/demo/rabbit-basket/source.mp4",
+      "sha256": "be16cfc5cc672c62b1b412ba74017722035ee3853b5c336ecde5211b78ac59a8"
+    },
+    "assets/demo/rabbit-basket/text_embedding.pt": {
+      "path": "assets/demo/rabbit-basket/text_embedding.pt",
+      "sha256": "dbf2133684cd4e3609c7a8a45426e63eb4a21a77bffc5faf5719dcdaca230f46"
+    },
+    "assets/demo/rabbit-basket/trajectory.npz": {
+      "path": "assets/demo/rabbit-basket/trajectory.npz",
+      "sha256": "1977ce53c9d0da4035507ef67952cf189b71629f3667281df3438af01be0f1de"
+    },
+    "assets/demo/rabbit-basket/trajectory_new.npz": {
+      "path": "assets/demo/rabbit-basket/trajectory_new.npz",
+      "sha256": "e4fa3b630071e3ff6d92ad81fbdd4a84852c27d2733cb9694bbfc6bac8a83515"
+    },
+    "assets/demo/snowboard/caption.txt": {
+      "path": "assets/demo/snowboard/caption.txt",
+      "sha256": "3855b8f7e183613a7ffa0cfc47dce08776cff2dccd0f1c69b61958d37f29adf3"
+    },
+    "assets/demo/snowboard/demo_meta.json": {
+      "path": "assets/demo/snowboard/demo_meta.json",
+      "sha256": "36386e5204fb60da3f4be815e495cae14461605fe246b19ecc9c0c095ece0be0"
+    },
+    "assets/demo/snowboard/masks.npz": {
+      "path": "assets/demo/snowboard/masks.npz",
+      "sha256": "0c4460d86986fd49bf287b7fd6caec28999c96a9d1c287d266b37167c2b0d1d2"
+    },
+    "assets/demo/snowboard/render.mp4": {
+      "path": "assets/demo/snowboard/render.mp4",
+      "sha256": "59de32944e94f360367189007e27baad65b4789bcd288c24c6013f603e588a2d"
+    },
+    "assets/demo/snowboard/source.mp4": {
+      "path": "assets/demo/snowboard/source.mp4",
+      "sha256": "b481b9b095115a72ca8719aae5a1773c04b3b0261bd1f61e62f334aeb4ba5b68"
+    },
+    "assets/demo/snowboard/text_embedding.pt": {
+      "path": "assets/demo/snowboard/text_embedding.pt",
+      "sha256": "c60d9d72617427b48e0b65d262d80fe28c392f18953c9f235c99e5cf05d271b9"
+    },
+    "assets/demo/snowboard/trajectory.npz": {
+      "path": "assets/demo/snowboard/trajectory.npz",
+      "sha256": "dd6309584cc6049352c28075ac75499d7b2c942bc8b6d5a2b499d82c672ca0ba"
+    },
+    "assets/demo/snowboard/trajectory_new.npz": {
+      "path": "assets/demo/snowboard/trajectory_new.npz",
+      "sha256": "c170c510151578f9d088a05081f8de04462e157f41ffc2701956e0ff718ed731"
+    },
+    "assets/demo/woman-phone/caption.txt": {
+      "path": "assets/demo/woman-phone/caption.txt",
+      "sha256": "e963f64223dafdac54d0539d88f728dbaf71c56a6c78cb38349850a47ecd0e89"
+    },
+    "assets/demo/woman-phone/demo_meta.json": {
+      "path": "assets/demo/woman-phone/demo_meta.json",
+      "sha256": "faf17e7a232732e59a6e4bbc0f5ae57c9666f1f8e547a38fdb74ef0bde773ef0"
+    },
+    "assets/demo/woman-phone/masks.npz": {
+      "path": "assets/demo/woman-phone/masks.npz",
+      "sha256": "5d783b98e2dff1f57f1d4b71ba14d94a3bbed841d29a24f936d61a4f2cc8c286"
+    },
+    "assets/demo/woman-phone/render.mp4": {
+      "path": "assets/demo/woman-phone/render.mp4",
+      "sha256": "6798ce5567826e174c08bae96a605746e870c9069bce4efcca486cb9eef5f678"
+    },
+    "assets/demo/woman-phone/source.mp4": {
+      "path": "assets/demo/woman-phone/source.mp4",
+      "sha256": "f08a8f320a59a446447aa52bba1cbb437faad63e9a511ae0a5840b44bd64b005"
+    },
+    "assets/demo/woman-phone/text_embedding.pt": {
+      "path": "assets/demo/woman-phone/text_embedding.pt",
+      "sha256": "804281d327c241df9e5dd3832b96a533d8fddf95a90bfb4a537bef7745b0a6d2"
+    },
+    "assets/demo/woman-phone/trajectory.npz": {
+      "path": "assets/demo/woman-phone/trajectory.npz",
+      "sha256": "8839d9c6ed5705037a1fabc7f7b975a75f8c09e464bca957253bcf4c2dea28fb"
+    },
+    "assets/demo/woman-phone/trajectory_new.npz": {
+      "path": "assets/demo/woman-phone/trajectory_new.npz",
+      "sha256": "0d3b7c115c76d9076feb3099786af637c113f5ed85bb298106d7ee828053e09b"
+    },
+    "assets/pipeline.png": {
+      "path": "assets/pipeline.png",
+      "sha256": "ee4cdd26bd929a9ed5b85e850bf09510af205f6548ab6055b6bfd7a6447d1d4a"
+    },
+    "checkpoints/README.md": {
+      "path": "checkpoints/README.md",
+      "sha256": "cab4cb2a6bcf158bc0cb251db74a84e53f78aeb05f0cfc1253be5f24533745f0"
+    },
+    "configs/manifold4d.yaml": {
+      "path": "configs/manifold4d.yaml",
+      "sha256": "a07b65c035a10a89987c8517d848d576835c2e087bea25b0318800d6fc9dbe86"
+    },
+    "configs/neg_prompt_emb.pt": {
+      "path": "configs/neg_prompt_emb.pt",
+      "sha256": "b55ba4ea40983fe5835a10732c79810f229725e2c5c8905962a211630ae4581a"
+    },
+    "external/README.md": {
+      "path": "external/README.md",
+      "sha256": "6e4e20aaca93011fd35aca3b3ce03a7cef041765d9cdf00b812996c2564d625b"
+    },
+    "manifold4d/__init__.py": {
+      "path": "manifold4d/__init__.py",
+      "sha256": "b18221b1fa2e8be972dded2ef7e69212f4fc5ab52cbf7d91a2182d58f843b357"
+    },
+    "manifold4d/condition/__init__.py": {
+      "path": "manifold4d/condition/__init__.py",
+      "sha256": "233fc570489e9b53a80122a50042f84f64b2adb764008227dfc7a8117856ec27"
+    },
+    "manifold4d/condition/render_cond.py": {
+      "path": "manifold4d/condition/render_cond.py",
+      "sha256": "1d242a1356686687c20eba739394f97f91ab0838ad1142f80e73f49065d4a886"
+    },
+    "manifold4d/demo.py": {
+      "path": "manifold4d/demo.py",
+      "sha256": "2c1c69308e44d63c33bd5115e77ed5176aec331b9d6e9b22de664f45dcc1c3ec"
+    },
+    "manifold4d/generate.py": {
+      "path": "manifold4d/generate.py",
+      "sha256": "842e265f43630880a8afd4c5dec869dc26e52199f18f49e42b1e814ddcbe16b0"
+    },
+    "manifold4d/infer.py": {
+      "path": "manifold4d/infer.py",
+      "sha256": "991875b60aa63ba924be7d2e1d59e94e9ad90d7becd95cec3972ea4f600a0640"
+    },
+    "manifold4d/model/__init__.py": {
+      "path": "manifold4d/model/__init__.py",
+      "sha256": "9864ae0beecf5babcb9e9172593a18ab2dced4e7237d37328a8710a0c520ccab"
+    },
+    "manifold4d/model/attention_compat.py": {
+      "path": "manifold4d/model/attention_compat.py",
+      "sha256": "cfc7153a2ac51063c55ba9bd2a752f51019cca9abb621f90966aaf130dccf631"
+    },
+    "manifold4d/model/camera_encoder.py": {
+      "path": "manifold4d/model/camera_encoder.py",
+      "sha256": "a6192c971fad05270633540f139c138cd6f1f6f91f04fa675f3ebf7d4f78d289"
+    },
+    "manifold4d/model/epipolar_bias.py": {
+      "path": "manifold4d/model/epipolar_bias.py",
+      "sha256": "ba3a2c40743b56308c7cda41609c9b68bddc0e1b492fb69ec1ffdaab0099be62"
+    },
+    "manifold4d/model14b/__init__.py": {
+      "path": "manifold4d/model14b/__init__.py",
+      "sha256": "2eca77d6731852d54561022f39369b40d631b68ace6a50aeebabe87a96ab9cff"
+    },
+    "manifold4d/model14b/helpers_14b.py": {
+      "path": "manifold4d/model14b/helpers_14b.py",
+      "sha256": "b8b17e9c3267959a71dcb5decc0c9c9a149f9559a0ea10da85dfb2d60d5ccc49"
+    },
+    "manifold4d/model14b/manifold4d_14b.py": {
+      "path": "manifold4d/model14b/manifold4d_14b.py",
+      "sha256": "5779d8b42d3a3a7db322de007827d8cbb1eebbe0352162fce9bc47c49f8d181b"
+    },
+    "manifold4d/model14b/wan21_t2v.py": {
+      "path": "manifold4d/model14b/wan21_t2v.py",
+      "sha256": "63c742bae99cec910cbc7b1f9124a0dc914b308efa5344b55b97066350f71200"
+    },
+    "manifold4d/rendering/__init__.py": {
+      "path": "manifold4d/rendering/__init__.py",
+      "sha256": "e46b52ba388a740400a97323eb9ab40b3f6f8210ffdad9cccdb1b312dfbf346f"
+    },
+    "manifold4d/rendering/foreground_mask.py": {
+      "path": "manifold4d/rendering/foreground_mask.py",
+      "sha256": "76ae17916e371fe66486ef6279869d0c0433d727c2a779b2c463657cfb68e06f"
+    },
+    "manifold4d/rendering/gpu_renderer.py": {
+      "path": "manifold4d/rendering/gpu_renderer.py",
+      "sha256": "ad85391b2e34685b12f9b0caf8db79e1629c4e8b78a4060ebd1f06f26bc959bb"
+    },
+    "manifold4d/rendering/point_cloud.py": {
+      "path": "manifold4d/rendering/point_cloud.py",
+      "sha256": "9782cff7ceb2cc46aed3671860d53453c23add79da75f771565dac2976943075"
+    },
+    "requirements.txt": {
+      "path": "requirements.txt",
+      "sha256": "75ba23555b760aab350fdd1ac2b58c08a083211dc7c481b3386ca943c1ebb962"
+    },
+    "scripts/Manifold4D-Eval-card.md": {
+      "path": "scripts/Manifold4D-Eval-card.md",
+      "sha256": "710e2e4039440862c05eabc2997a476f04724873af136134b51cb590f6e44b56"
+    },
+    "scripts/download_weights.sh": {
+      "path": "scripts/download_weights.sh",
+      "sha256": "2c3bbe569d6eb377053b8f1bac941578b4cd371afd8ee3ba168d1cd23fa6df73"
+    },
+    "scripts/export_demo_scene.py": {
+      "path": "scripts/export_demo_scene.py",
+      "sha256": "304ae4db2b20f4ffc030b9b2432dd688a293b51f52b666d7fdb2f8d13f0c94d7"
+    },
+    "scripts/pack_eval_dataset.py": {
+      "path": "scripts/pack_eval_dataset.py",
+      "sha256": "63ae6cd5ef756b2e6e616319d97e5b72b43d01998324322883634a114527959e"
+    },
+    "scripts/preprocess/build_val_traj.py": {
+      "path": "scripts/preprocess/build_val_traj.py",
+      "sha256": "c53518e3912e0a9672aa13e36956389bb4f8aeda2fca6d2b5e0a3e09002e2e65"
+    },
+    "scripts/preprocess/caption_vlm.py": {
+      "path": "scripts/preprocess/caption_vlm.py",
+      "sha256": "fb8c9f60b67d7f804969657b3b6b913848f08075af612be94ce186f15d9dc70b"
+    },
+    "scripts/preprocess/encode_neg_prompt.py": {
+      "path": "scripts/preprocess/encode_neg_prompt.py",
+      "sha256": "1930055f95ffaaece5ea8695262c3947ad7ba7c4ecf8d55ba73071679a1071a5"
+    },
+    "scripts/preprocess/encode_text_t5.py": {
+      "path": "scripts/preprocess/encode_text_t5.py",
+      "sha256": "496e32d4c86dc490f83f7bb7bbdc9f48ebcdeb96e6153ff3b092e023299ad7b2"
+    },
+    "scripts/preprocess/prepare_vggt_omega_core.py": {
+      "path": "scripts/preprocess/prepare_vggt_omega_core.py",
+      "sha256": "125f8d7a48032cab76f85bc08f4bc1e122fdb3d9cefe94206aec454696f70640"
+    },
+    "scripts/preprocess/run_sam3_caption_mask.py": {
+      "path": "scripts/preprocess/run_sam3_caption_mask.py",
+      "sha256": "63e3f8fb5dcb14f4a832d73d744a487682bbeb332eb4f4b6461984aa633e1a59"
+    },
+    "scripts/preprocess/run_sam3_iphone.py": {
+      "path": "scripts/preprocess/run_sam3_iphone.py",
+      "sha256": "e2266d76963a88e03287450884c88c8a03c2e08bd359b868eb5db9dc94b1eb38"
+    },
+    "scripts/preprocess/run_vggt_caption_t5_sam3_traj.py": {
+      "path": "scripts/preprocess/run_vggt_caption_t5_sam3_traj.py",
+      "sha256": "fead2661da980092c5a8d799765aef2774d1b701385766c415825c5c5a3008af"
+    },
+    "setup.py": {
+      "path": "setup.py",
+      "sha256": "e010e5df909d6e8f80b9ac6642de533ef32a25d30d38b32d260d8f89f31733e9"
+    }
+  }
+}

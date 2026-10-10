@@ -1,0 +1,13 @@
+# Released Manifold4D two-stream model, using this repository's geometry frontend.
+model:
+  positional_embedding_offset: 31
+  cond_stream_t: honest
+  prior_sigma: 0.3
+inference:
+  height: 384
+  width: 672
+  num_frames: 49
+  num_inference_steps: 50
+  cfg_scale: 5.0
+  sigma_shift: 5.0
+  solver: unipc

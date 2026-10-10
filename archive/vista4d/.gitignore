@@ -241,27 +241,3 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
-
-# Official Manifold4D dependencies and runtime artifacts
-external/*
-!external/README.md
-!external/sources.json
-!checkpoints/README.md
-output/
-outputs/
-output_4dgs/
-render_output/
-my_videos/
-wandb/
-runs/
-experiment_runs/
-nohup.out
-*.pt
-*.pth
-*.safetensors
-*.ckpt
-*.bin
-
-# Small conditioning fixtures shipped by the official repository
-!configs/neg_prompt_emb.pt
-!assets/demo/**

@@ -1,0 +1,20 @@
+{
+  "wan": {
+    "repository": "https://github.com/Wan-Video/Wan2.1.git",
+    "commit": "9737cba9c1c3c4d04b33fcad41c111989865d315",
+    "directory": "Wan2.1",
+    "purpose": "Official Manifold4D generator, VAE, T5 and scheduler dependencies"
+  },
+  "vggt": {
+    "repository": "https://github.com/facebookresearch/vggt-omega.git",
+    "commit": "48b23c8ce72c9a8fcf987f0d7f43d8e4870759f6",
+    "directory": "vggt-omega-main",
+    "purpose": "Optional source-video geometry preprocessing"
+  },
+  "sam3": {
+    "repository": "https://github.com/facebookresearch/sam3.git",
+    "commit": "0570b3a5be9c4e694f23d85232fb55f4a6f1f7fc",
+    "directory": "sam3",
+    "purpose": "Optional dynamic-mask preprocessing; model weights are separate"
+  }
+}
